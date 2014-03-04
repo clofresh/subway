@@ -43,10 +43,17 @@ function Doors:areOpen(dt)
 end
 
 function Doors:load()
+    self.leftDoor = love.graphics.newImage('img/door.png')
+    self.rightDoor = love.graphics.newImage('img/door.png')
     self.state = self.areClosed
     self.toggle = self.open
 end
 
 function Doors:update(dt)
     self:state(dt)
+end
+
+function Doors:draw()
+    love.graphics.draw(self.leftDoor)
+    love.graphics.draw(self.rightDoor, 99)
 end

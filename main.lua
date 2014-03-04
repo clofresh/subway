@@ -1,6 +1,7 @@
 require('src/input')
 require('src/train')
 require('src/doors')
+require('src/station')
 
 function nothing()
 end
@@ -10,11 +11,8 @@ function love.load()
         fullscreen = false,
         resizable = false,
     })
-    background = love.graphics.newImage('img/background.png')
-    car = love.graphics.newImage('img/car.png')
-    leftDoor = love.graphics.newImage('img/door.png')
-    rightDoor = love.graphics.newImage('img/door.png')
 
+    Station:load()
     Train:load()
     Doors:load()
     InputManager:load()
@@ -26,8 +24,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.draw(background)
-    love.graphics.draw(car)
-    love.graphics.draw(leftDoor)
-    love.graphics.draw(rightDoor, 99)
+    Station:draw()
+    Train:draw()
+    Doors:draw()
 end

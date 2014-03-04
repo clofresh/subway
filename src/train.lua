@@ -35,10 +35,15 @@ function Train:isOutgoing(dt)
 end
 
 function Train:load()
+    self.car = love.graphics.newImage('img/car.png')
     self.state = self.isStopped
     self.tryMove = self.move
 end
 
 function Train:update(dt)
     self:state(dt)
+end
+
+function Train:draw()
+    love.graphics.draw(self.car)
 end
