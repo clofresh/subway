@@ -20,6 +20,8 @@ end
 
 function Doors:areClosing(dt)
     closingTimer = closingTimer + dt
+    self.leftX = self.leftX + dt * self.speed
+    self.rightX = self.rightX - dt * self.speed
     if closingTimer > 2 then
         print('doors closed')
         self.state = self.areClosed
@@ -32,6 +34,8 @@ end
 
 function Doors:areOpening(dt)
     openingTimer = openingTimer + dt
+    self.leftX = self.leftX - dt * self.speed
+    self.rightX = self.rightX + dt * self.speed
     if openingTimer > 2 then
         print('doors open')
         self.state = self.areOpen
@@ -45,6 +49,12 @@ end
 function Doors:load()
     self.leftDoor = love.graphics.newImage('img/door.png')
     self.rightDoor = love.graphics.newImage('img/door.png')
+    self.leftX = 0
+    self.leftY = 0
+    self.rightX = 0
+    self.rightY = 0
+    self.offsetX = 99
+    self.speed = 40
     self.state = self.areClosed
     self.toggle = self.open
 end
@@ -54,6 +64,6 @@ function Doors:update(dt)
 end
 
 function Doors:draw()
-    love.graphics.draw(self.leftDoor)
-    love.graphics.draw(self.rightDoor, 99)
+    love.graphics.draw(self.leftDoor, self.leftX, self.leftY)
+    love.graphics.draw(self.rightDoor, self.rightX + self.offsetX, self.rightY)
 end
