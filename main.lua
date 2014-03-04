@@ -15,16 +15,14 @@ function love.load()
     leftDoor = love.graphics.newImage('img/door.png')
     rightDoor = love.graphics.newImage('img/door.png')
 
-    Train.state = Train.isStopped
-    Train.tryMove = Train.move
-    Doors.state = Doors.areClosed
-    Doors.toggle = Doors.open
-    love.mousepressed = InputManager.mousepressed
+    Train:load()
+    Doors:load()
+    InputManager:load()
 end
 
 function love.update(dt)
-    Train:state(dt)
-    Doors:state(dt)
+    Train:update(dt)
+    Doors:update(dt)
 end
 
 function love.draw()

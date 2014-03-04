@@ -41,3 +41,12 @@ end
 
 function Doors:areOpen(dt)
 end
+
+function Doors:load()
+    self.state = self.areClosed
+    self.toggle = self.open
+end
+
+function Doors:update(dt)
+    self:state(dt)
+end

@@ -33,3 +33,12 @@ function Train:isOutgoing(dt)
     end
     self.timer = t
 end
+
+function Train:load()
+    self.state = self.isStopped
+    self.tryMove = self.move
+end
+
+function Train:update(dt)
+    self:state(dt)
+end

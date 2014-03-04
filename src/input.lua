@@ -26,3 +26,7 @@ function InputManager.mousereleased(x, y, button)
     love.mousepressed = nothing
     love.mousereleased = nothing
 end
+
+function InputManager:load()
+    love.mousepressed = InputManager.mousepressed
+end
