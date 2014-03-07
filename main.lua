@@ -18,6 +18,7 @@ end
 
 function love.update(dt)
     Train:update(dt)
+    InputManager:update(dt)
 end
 
 function love.draw()

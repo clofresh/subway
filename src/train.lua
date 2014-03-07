@@ -2,12 +2,12 @@ require('src/doors')
 
 Train = {}
 
-function Train:move(displacement)
+function Train:move(speed)
     print("train is leaving the station")
     self.state = self.isOutgoing
     self.timer = 0
     self.tryMove = nothing
-    self.speed = displacement[1]
+    self.speed = speed
 end
 
 function Train:isStopped(dt)
