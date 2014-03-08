@@ -22,7 +22,9 @@ function Doors:areClosing(dt)
     closingTimer = closingTimer + dt
     self.leftX = self.leftX + dt * self.speed
     self.rightX = self.rightX - dt * self.speed
-    if closingTimer > 2 then
+    if self.rightX <= 1 then
+        self.leftX = 0
+        self.rightX = 0
         print('doors closed')
         self.state = self.areClosed
         love.mousepressed = InputManager.mousepressed
@@ -36,7 +38,9 @@ function Doors:areOpening(dt)
     openingTimer = openingTimer + dt
     self.leftX = self.leftX - dt * self.speed
     self.rightX = self.rightX + dt * self.speed
-    if openingTimer > 2 then
+    if self.rightX > 50 then
+        self.leftX = -50
+        self.rightX = 50
         print('doors open')
         self.state = self.areOpen
         love.mousepressed = InputManager.mousepressed
@@ -54,7 +58,7 @@ function Doors:load()
     self.rightX = 0
     self.rightY = 0
     self.offsetX = 99
-    self.speed = 40
+    self.speed = 100
     self.state = self.areClosed
     self.toggle = self.open
 end
