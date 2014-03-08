@@ -43,6 +43,7 @@ function Train:isOutgoing(dt)
         self.speed = 1000
         self.x = -1024
         t = 0
+        self.people = {}
     end
     self.timer = t
 end
@@ -53,12 +54,18 @@ function Train:load()
     self.tryMove = self.move
     self.x = 0
     self.speed = 0
+    self.people = {}
     Doors:load()
 end
 
 function Train:update(dt)
     self:state(dt)
     Doors:update(dt)
+    People:update(self.people, dt)
+end
+
+function Train:add(person)
+    People:add(self.people, person)
 end
 
 function Train:draw()
@@ -68,5 +75,6 @@ function Train:draw()
     love.graphics.push()
     love.graphics.translate(self.x, 0)
     Doors:draw()
+    People:draw(self.people)
     love.graphics.pop()
 end

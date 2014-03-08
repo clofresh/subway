@@ -12,15 +12,14 @@ function love.load()
         resizable = false,
     })
 
-    Station:load()
     People:load()
+    Station:load()
     Train:load()
     InputManager:load()
 end
 
 function love.update(dt)
     Station:update(dt)
-    People:update(dt)
     Train:update(dt)
     InputManager:update(dt)
 end
@@ -28,5 +27,5 @@ end
 function love.draw()
     Station:draw()
     Train:draw()
-    People:draw()
+    People:draw(Station.people)
 end

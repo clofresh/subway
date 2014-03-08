@@ -30,33 +30,41 @@ function People:waitForOpenDoor(person, dt)
 end
 
 function People:goToTrain(person, dt)
-	return goTo(person, Station.train, dt, 0)
+	local onTrain = goTo(person, Station.train, dt, 5)
+	person.onTrain = onTrain
+	return onTrain
 end
 
 function People:load()
 	self.id = 0
-	self.timer = 0
-	self.people = {}
-	People:add({x = 200, y = 200, r = 10})
 end
 
-function People:add(person)
-	id = self.id + 1
-	self.id = id
-	person.id = id
-	person.plan = {
-		self.goToTurnstile,
-		self.useCard,
-		self.goToTrainDoor,
-		self.waitForOpenDoor,
-		self.goToTrain,
-	}
-	self.people[id] = person
+function People:add(people, person)
+	id = person.id
+	if id == nil then
+		id = self.id + 1
+		self.id = id
+		person.id = id
+	end
+	if person.plan == nil then
+		person.plan = {
+			self.goToTurnstile,
+			self.useCard,
+			self.goToTrainDoor,
+			self.waitForOpenDoor,
+			self.goToTrain,
+		}
+	end
+	people[id] = person
 end
 
-function People:update(dt)
+function People:remove(people, person)
+	people[person.id] = nil
+end
+
+function People:update(people, dt)
 	local success, action
-	for person_id, person in pairs(self.people) do
+	for person_id, person in pairs(people) do
 		action = person.plan[1]
 		if action then
 			success = action(self, person, dt)
@@ -64,17 +72,18 @@ function People:update(dt)
 				table.remove(person.plan, 1)
 			end
 		end
-	end
-	self.timer = self.timer + dt
-	if self.timer > 5 then
-		self:add({x = 200, y = 200, r = 10})
-		self.timer = 0
+		if person.onTrain then
+			Station:remove(person)
+			Train:add(person)
+		else
+			table[person_id] = person
+		end
 	end
 end
 
-function People:draw()
+function People:draw(people)
 	love.graphics.setColor(0, 255, 0)
-	for id, person in pairs(self.people) do
+	for id, person in pairs(people) do
 		love.graphics.circle("fill", person.x, person.y, person.r)
 	end
 	love.graphics.setColor(255, 255, 255)
