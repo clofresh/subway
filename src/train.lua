@@ -17,7 +17,7 @@ function Train:isIncoming(dt)
     local t = self.timer
     t = t + dt
     self.x = self.x + dt * self.speed
-    if t > 2 then
+    if self.x > 0 then
         print('train has entered the station')
         self.state = self.isStopped
         self.tryMove = self.move
@@ -37,7 +37,7 @@ function Train:isOutgoing(dt)
     local t = self.timer
     t = t + dt
     self.x = self.x + dt * self.speed
-    if t > 2 then
+    if self.x > love.graphics.getWidth() then
         print('train has left the station')
         self.state = self.isIncoming
         self.speed = 1000
