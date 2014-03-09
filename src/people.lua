@@ -1,12 +1,12 @@
 People = {}
 
 function goTo(actor, destination, dt, threshold)
-	local direction = {destination.x - actor.x, destination.y - actor.y}
+	local x, y = actor.shape:center()
+	local direction = {destination.x - x, destination.y - y}
 	local mag = math.sqrt(direction[1]^2 + direction[2]^2)
 	if mag > threshold then
 		local unitDirection = {direction[1] / mag, direction[2] / mag}
-		actor.x = actor.x + unitDirection[1]
-		actor.y = actor.y + unitDirection[2]
+		actor.shape:move(unitDirection[1], unitDirection[2])
 		return false
 	else
 		return true
@@ -39,7 +39,7 @@ function People:load()
 	self.id = 0
 end
 
-function People:add(people, person)
+function People:add(people, person, x, y, r)
 	id = person.id
 	if id == nil then
 		id = self.id + 1
@@ -54,6 +54,9 @@ function People:add(people, person)
 			self.waitForOpenDoor,
 			self.goToTrain,
 		}
+	end
+	if person.shape == nil then
+	    person.shape = Collider:addCircle(x, y, r)
 	end
 	people[id] = person
 end
@@ -83,8 +86,10 @@ end
 
 function People:draw(people)
 	love.graphics.setColor(0, 255, 0)
+	local x, y, r
 	for id, person in pairs(people) do
-		love.graphics.circle("fill", person.x, person.y, person.r)
+		x, y, r = person.shape:outcircle()
+		love.graphics.circle("fill", x, y, r)
 	end
 	love.graphics.setColor(255, 255, 255)
 end
