@@ -1,0 +1,4 @@
+*.lua
+lib/*/*.lua
+img/*
+src/*.lua
