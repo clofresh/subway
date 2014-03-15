@@ -7,7 +7,6 @@ function Station:load()
 	self.train = {x=226, y=682}
 	self.people = {}
 	People:add(self.people, {}, 200, 200, 10)
-	print(self.people)
 	self.timer = 0
 end
 

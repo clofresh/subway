@@ -1,6 +1,8 @@
 People = {}
 
 function goTo(actor, destination, dt, threshold)
+	actor.animationTimer = actor.animationTimer + dt
+	actor.animation = 'walking'
 	local x, y = actor.shape:center()
 	local direction = {destination.x - x, destination.y - y}
 	local mag = math.sqrt(direction[1]^2 + direction[2]^2)
@@ -9,6 +11,7 @@ function goTo(actor, destination, dt, threshold)
 		actor.shape:move(unitDirection[1], unitDirection[2])
 		return false
 	else
+		actor.animation = 'idle'
 		return true
 	end
 end
@@ -38,8 +41,25 @@ end
 function People:load()
 	self.id = 0
 	self.image = love.graphics.newImage('img/person.png')
-	local g = anim8.newGrid(32, 32, self.image:getWidth(), self.image:getHeight())
-	self.happyWalking = anim8.newAnimation(g('2-3',1), 0.3)
+	self.batch = love.graphics.newSpriteBatch(self.image)
+	local tileWidth = 32
+	local tileHeight = 32
+	local imageWidth = self.image:getWidth()
+	local imageHeight = self.image:getHeight()
+	self.quads = {
+		idle = {love.graphics.newQuad(0, 0, tileWidth, tileHeight, imageWidth, imageHeight)},
+		walking = {
+			love.graphics.newQuad(tileWidth, 0, tileWidth, tileHeight, imageWidth, imageHeight),
+			love.graphics.newQuad(tileWidth*2, 0, tileWidth, tileHeight, imageWidth, imageHeight),
+		}
+	}
+
+	-- Should eventually be animation-specific
+	self.fps = 6.0
+	self.w = 16
+	self.h = 31
+	self.ox = 8
+	self.oy = 1
 end
 
 function People:add(people, person, x, y, r)
@@ -59,8 +79,10 @@ function People:add(people, person, x, y, r)
 		}
 	end
 	if person.shape == nil then
-	    person.shape = Collider:addRectangle(x, y, 16, 31)
+	    person.shape = Collider:addRectangle(x, y, self.w, self.h)
 	end
+	person.animationTimer = 0
+	person.animation = 'idle'
 	people[id] = person
 end
 
@@ -70,7 +92,6 @@ end
 
 function People:update(people, dt)
 	local success, action
-	self.happyWalking:update(dt)
 	for person_id, person in pairs(people) do
 		action = person.plan[1]
 		if action then
@@ -89,9 +110,16 @@ function People:update(people, dt)
 end
 
 function People:draw(people)
-	local x1, y1, x2, y2
+	local x1, y1, x2, y2, frame, animation
+	local spf = 1.0 / self.fps
+	local ox = self.ox
+	local oy = self.oy
 	for id, person in pairs(people) do
 		x1, y1, x2, y2 = person.shape:bbox()
-		self.happyWalking:draw(self.image, x1, y1, nil, nil, nil, 8, 1)
+		animation = self.quads[person.animation]
+		frame = math.floor(person.animationTimer / spf) % #animation
+		self.batch:add(animation[frame + 1], x1, y1, nil, nil, nil, ox, oy)
 	end
+	love.graphics.draw(self.batch)
+	self.batch:clear()
 end
