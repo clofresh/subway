@@ -59,7 +59,7 @@ function People:add(people, person, x, y, r)
 		}
 	end
 	if person.shape == nil then
-	    person.shape = Collider:addCircle(x, y, r)
+	    person.shape = Collider:addRectangle(x, y, 16, 31)
 	end
 	people[id] = person
 end
@@ -89,12 +89,9 @@ function People:update(people, dt)
 end
 
 function People:draw(people)
-	-- love.graphics.setColor(0, 255, 0)
-	local x, y, r
+	local x1, y1, x2, y2
 	for id, person in pairs(people) do
-		x, y, r = person.shape:outcircle()
-		self.happyWalking:draw(self.image, x, y)
-		-- love.graphics.circle("fill", x, y, r)
+		x1, y1, x2, y2 = person.shape:bbox()
+		self.happyWalking:draw(self.image, x1, y1, nil, nil, nil, 8, 1)
 	end
-	-- love.graphics.setColor(255, 255, 255)
 end
