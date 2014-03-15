@@ -1,3 +1,6 @@
 [submodule "lib/hardoncollider"]
 	path = lib/hardoncollider
 	url = git://github.com/vrld/HardonCollider.git
+[submodule "lib/anim8"]
+	path = lib/anim8
+	url = https://github.com/kikito/anim8.git

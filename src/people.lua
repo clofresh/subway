@@ -37,6 +37,9 @@ end
 
 function People:load()
 	self.id = 0
+	self.image = love.graphics.newImage('img/person.png')
+	local g = anim8.newGrid(32, 32, self.image:getWidth(), self.image:getHeight())
+	self.happyWalking = anim8.newAnimation(g('2-3',1), 0.3)
 end
 
 function People:add(people, person, x, y, r)
@@ -67,6 +70,7 @@ end
 
 function People:update(people, dt)
 	local success, action
+	self.happyWalking:update(dt)
 	for person_id, person in pairs(people) do
 		action = person.plan[1]
 		if action then
@@ -85,11 +89,12 @@ function People:update(people, dt)
 end
 
 function People:draw(people)
-	love.graphics.setColor(0, 255, 0)
+	-- love.graphics.setColor(0, 255, 0)
 	local x, y, r
 	for id, person in pairs(people) do
 		x, y, r = person.shape:outcircle()
-		love.graphics.circle("fill", x, y, r)
+		self.happyWalking:draw(self.image, x, y)
+		-- love.graphics.circle("fill", x, y, r)
 	end
-	love.graphics.setColor(255, 255, 255)
+	-- love.graphics.setColor(255, 255, 255)
 end

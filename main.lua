@@ -1,4 +1,5 @@
 HC = require('lib/hardoncollider')
+anim8 = require('lib/anim8/anim8')
 require('src/input')
 require('src/train')
 require('src/station')
