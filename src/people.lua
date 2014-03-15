@@ -6,6 +6,11 @@ function goTo(actor, destination, dt, threshold)
 	local x, y = actor.shape:center()
 	local direction = {destination.x - x, destination.y - y}
 	local mag = math.sqrt(direction[1]^2 + direction[2]^2)
+	if direction[1] > 0 then
+		actor.dir = 1
+	else
+		actor.dir = -1
+	end
 	if mag > threshold then
 		local unitDirection = {direction[1] / mag, direction[2] / mag}
 		actor.shape:move(unitDirection[1], unitDirection[2])
@@ -112,13 +117,18 @@ end
 function People:draw(people)
 	local x1, y1, x2, y2, frame, animation
 	local spf = 1.0 / self.fps
-	local ox = self.ox
+	local ox
 	local oy = self.oy
 	for id, person in pairs(people) do
 		x1, y1, x2, y2 = person.shape:bbox()
 		animation = self.quads[person.animation]
 		frame = math.floor(person.animationTimer / spf) % #animation
-		self.batch:add(animation[frame + 1], x1, y1, nil, nil, nil, ox, oy)
+		if person.dir == -1 then
+			ox = self.ox + self.w
+		else
+			ox = self.ox
+		end
+		self.batch:add(animation[frame + 1], x1, y1, nil, person.dir, 1, ox, oy)
 	end
 	love.graphics.draw(self.batch)
 	self.batch:clear()
